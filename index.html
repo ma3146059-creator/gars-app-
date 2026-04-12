@@ -1,147 +1,33 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl" id="main-html">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مؤسسة غرس لتنسيق الحدائق</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root { --royal-green: #1a472a; --gold: #c5a059; --bg-light: #f4f7f6; }
-        * { box-sizing: border-box; transition: all 0.3s ease; }
-        body { margin: 0; background: var(--bg-light); color: #333; font-family: 'Tajawal', sans-serif; overflow-x: hidden; }
-        
-        /* الهوية البصرية */
-        header { background: var(--royal-green); padding: 50px 20px; text-align: center; color: white; border-radius: 0 0 50px 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .logo-area { font-size: 40px; border: 3px solid var(--gold); width: 80px; height: 80px; line-height: 80px; border-radius: 50%; margin: 0 auto 15px; color: var(--gold); background: white; }
-        
-        /* شاشة الدخول الفاخرة */
-        #login-screen { position: fixed; inset: 0; background: linear-gradient(135deg, var(--royal-green), #0d2516); z-index: 5000; display: flex; align-items: center; justify-content: center; }
-        .login-card { background: white; width: 85%; max-width: 400px; padding: 40px 30px; border-radius: 30px; text-align: center; border-bottom: 8px solid var(--gold); }
-        input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; outline: none; background: #fafafa; }
-        input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(197, 160, 89, 0.2); }
-        .btn-gold { background: var(--gold); color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: bold; font-size: 18px; cursor: pointer; }
-
-        /* شريط التنقل السفلي - 5 أيقونات */
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.1); z-index: 1000; }
-        .nav-item { text-align: center; text-decoration: none; color: #999; flex: 1; font-size: 11px; font-weight: bold; }
-        .nav-item.active { color: var(--royal-green); }
-        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
-
-        /* الأقسام */
-        .view { padding: 20px; padding-bottom: 100px; display: none; }
-        .active-view { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* بطاقات الخدمات */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card { background: white; padding: 25px 15px; border-radius: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-right: 5px solid var(--gold); }
-        .card span { font-size: 30px; display: block; margin-bottom: 10px; }
-
-        /* تتبع الفني (خريطة تجريبية) */
-        .map-placeholder { background: #eee; height: 200px; border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 2px solid var(--gold); }
-        .tech-dot { width: 15px; height: 15px; background: red; border-radius: 50%; position: absolute; box-shadow: 0 0 15px red; animation: move 5s infinite linear; }
-        @keyframes move { 0% {left: 10%; top: 10%;} 50% {left: 80%; top: 70%;} 100% {left: 10%; top: 10%;} }
-
-        .iban-box { background: white; padding: 20px; border-radius: 20px; border: 2px dashed var(--gold); text-align: center; margin-top: 20px; }
-        .hidden { display: none !important; }
-    </style>
-</head>
-<body>
-
-    <button onclick="toggleLang()" style="position:fixed; top:20px; left:20px; z-index:6000; background:var(--gold); color:white; border:none; border-radius:10px; padding:5px 10px;" id="langBtn">English</button>
-
-    <div id="login-screen">
-        <div class="login-card">
-            <div class="logo-area">🌿</div>
-            <h2 style="color:var(--royal-green); margin:0;" id="l-name">مؤسسة غرس</h2>
-            <p style="color:var(--gold); font-size:13px; margin-bottom:25px;" id="l-sub">لتنسيق الحدائق وتركيب شبكات الري</p>
-            <input type="text" id="custName" placeholder="الاسم الكامل">
-            <input type="tel" id="custPhone" placeholder="رقم الجوال">
-            <button class="btn-gold" onclick="login()" id="l-btn">دخول فوري</button>
-        </div>
-    </div>
-
-    <div id="app" class="hidden">
-        <header>
-            <div class="logo-area">🌴</div>
-            <h2 id="h-title">مؤسسة غرس لتنسيق الحدائق</h2>
-            <p id="h-sub">خبيرك في التصميم والري</p>
-        </header>
-
-        <div id="view-services" class="view active-view">
-            <h3 id="t1">خدماتنا الاحترافية</h3>
-            <div class="grid">
-                <div class="card"><span>🍃</span><b id="s1">تنسيق حدائق</b></div>
-                <div class="card"><span>💧</span><b id="s2">شبكات ري</b></div>
-                <div class="card"><span>🌲</span><b id="s3">توريد نباتات</b></div>
-                <div class="card"><span>🛠️</span><b id="s4">صيانة شاملة</b></div>
-            </div>
-            
-            <h3 id="t2" style="margin-top:30px;">تتبع الفني (مباشر)</h3>
-            <div class="map-placeholder">
-                <span id="m-text">الفني في الطريق إليك...</span>
-                <div class="tech-dot"></div>
-            </div>
-        </div>
-
-        <div id="view-payments" class="view">
-            <h3 id="t3">بوابة الدفع الإلكتروني</h3>
-            <div class="iban-box">
-                <p><b>مصرف الراجحي</b></p>
-                <code style="font-size:14px;" id="ibanNum">SA56 8000 0204 6080 1612 0119</code>
-                <br><br>
-                <button onclick="copyIban()" class="btn-gold" style="padding:10px;" id="p-copy">نسخ الآيبان</button>
-            </div>
-        </div>
-
-        <nav class="nav-bar">
-            <a href="javascript:void(0)" class="nav-item active" onclick="showView('services', this)"><i>🌿</i><span id="n1">خدماتنا</span></a>
-            <a href="javascript:void(0)" class="nav-item" onclick="showView('store', this)"><i>🛒</i><span id="n2">المتجر</span></a>
-            <a href="javascript:void(0)" class="nav-item" onclick="showView('info', this)"><i>👤</i><span id="n3">بياناتي</span></a>
-            <a href="javascript:void(0)" class="nav-item" onclick="showView('payments', this)"><i>💳</i><span id="n4">الدفع</span></a>
-            <a href="https://wa.me/966561320444" class="nav-item"><i>💬</i><span id="n5">تواصل</span></a>
-        </nav>
-    </div>
-
-    <script>
-        // دالة الدخول وحفظ البيانات في Firebase (مستقبلاً)
-        function login() {
-            const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
-            if(name && phone) {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('app').classList.remove('hidden');
-            } else {
-                alert("لطفاً أدخل الاسم ورقم الجوال");
-            }
-        }
-
-        // دالة التنقل بين الصفحات
-        function showView(viewId, element) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
-            const target = document.getElementById('view-' + viewId);
-            if(target) target.classList.add('active-view');
-            
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active-view'));
-            element.classList.add('active-view');
-        }
-
-        // دالة نسخ الآيبان
-        function copyIban() {
-            navigator.clipboard.writeText("SA56 8000 0204 6080 1612 0119");
-            alert("تم نسخ الآيبان");
-        }
-
-        // دعم اللغات
-        let lang = 'ar';
-        function toggleLang() {
-            lang = lang === 'ar' ? 'en' : 'ar';
-            document.getElementById('main-html').dir = lang === 'ar' ? 'rtl' : 'ltr';
-            document.getElementById('langBtn').innerText = lang === 'ar' ? 'English' : 'العربية';
-            // تغيير النصوص هنا (تبسيطاً للمثال)
-        }
-    </script>
-</body>
-</html>
-
+قم ببناء تطبيق أندرويد احترافي (Mobile App) لمؤسسة 'غرس لتنسيق الحدائق' (Gars Foundation)، بحيث يكون جاهزاً للنشر على متجر جوجل بلاي (Google Play Store) بنسبة 100%، وفق المواصفات التالية:
+​1. نظام الدخول والتحقق (Access Control):
+​يطلب التطبيق من المستخدم عند الفتح (الاسم ورقم الجوال) فقط.
+​الدخول فوري ومباشر: يتم تحويل المستخدم للواجهة الرئيسية فور إدخال البيانات دون الحاجة لرسائل تحقق (OTP) أو كلمة مرور، لضمان سهولة الاستخدام.
+​2. تصميم الواجهة الرئيسية (Main UI Design):
+​الشعار واللقب: وضع الشعار المعتمد (شجرة النخيل داخل إكليل الغار) في أعلى الشاشة وتحته اللقب "غرس لتنسيق الحدائق وتركيب شبكات الري".
+​أيقونات الخدمات السريعة: عرض الخدمات التالية بشكل بارز في الواجهة الرئيسية مع الرموز التعبيرية المناسبة:
+​🍃 تنسيق وتصميم الحدائق.
+​💧 تركيب شبكات الري الحديثة.
+​🌲 زراعة وتوريد كافة أنواع النباتات.
+​🛠️ صيانة دورية وشاملة للحدائق.
+.قم بتغيير صوره الصفحه الرئيسيه للتطبيق بي الصوره التي ارفقتها مع الملف .
+​3. نظام تتبع الموظف (Live Technician Tracking):
+​تفعيل نظام خريطة تفاعلي (Google Maps API) يظهر موقع الموظف المباشر (Real-time) للعميل وهو في طريقه إليه لتنفيذ الخدمة.
+​4. دعم اللغات (Dual Language):
+​زر تبديل (عربي/English) في أعلى الشاشة مع تحويل كامل لاتجاهات الواجهة (RTL/LTR).
+​5. شريط التنقل السفلي (Bottom Navigation Bar) - 5 أيقونات:
+​خدماتنا (Our Services): تحتوي حصرياً على الخدمات الأربع المذكورة أعلاه.
+​المتجر (Store): نظام لبيع النباتات مع سلة مشتريات ونظام محاسبي.
+​بيانات العميل (My Info): حفظ (الاسم، الجوال، العنوان) وربط خرائط جوجل لتحديد الموقع.
+​الدفع الإلكتروني (Payments): * عرض باركود الراجحي والآيبان: SA56 8000 0204 6080 1612 0119.
+​توفير زر "نسخ" بجانب الآيبان.
+​تواصل معنا (Contact): قسم الشكاوي، معلومات المؤسسة، وزر واتساب مباشر للرقم: 966561320444.
+​6. ميزات الإدارة (Admin Panel):
+​تحديث المتجر: أيقونة خاصة للمدير لرفع صور النباتات وتعديل الأسعار من الجوال فوراً.
+​رفع المشاريع: ميزة رفع صور المشاريع الحقيقية لقسم الخدمات.
+​إدارة الطلبات: لوحة لاستقبال الطلبات وتحديث حالتها (قبول/رفض/قيد التنفيذ).
+​7. الفواتير والمشاركة:
+​إصدار فاتورة PDF رسمية باسم "مؤسسة غرس" تحتوي على التاريخ والمجموع، مع إضافة زر مشاركة (Share) للفاتورة عبر تطبيقات التواصل.
+​8. التصميم التقني (UI/UX):
+​الهوية البصرية: تصميم فخم واحترافي بألوان (الأخضر الملكي والذهبي).
+​الخطوط: خط 'Tajawal' للعربي و 'Inter' للإنجليزي.
+​الأداء: التطبيق يجب أن يكون سريعاً، خفيفاً، ومتوافقاً تماماً مع جميع إصدارات أندرويد الحديثة.
