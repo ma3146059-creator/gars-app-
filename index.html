@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="main-html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مؤسسة غرس | Gars Foundation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1a472a; --gold: #c5a059; --white: #ffffff; }
+        body { font-family: 'Tajawal', sans-serif; margin: 0; background: #f9f9f9; }
+        
+        /* مربع تبديل اللغة */
+        .lang-box { position: fixed; top: 15px; z-index: 3000; background: white; border: 2px solid var(--gold); padding: 4px; border-radius: 12px; display: flex; gap: 5px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        html[dir="rtl"] .lang-box { left: 15px; } html[dir="ltr"] .lang-box { right: 15px; }
+        .lang-btn { border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; }
+        .active-lang { background: var(--gold); color: white; }
+
+        /* الهوية البصرية (الشعار والألوان) */
+        header { background: var(--primary); color: white; text-align: center; padding: 45px 10px 20px; border-bottom: 5px solid var(--gold); }
+        .logo-area { font-size: 28px; font-weight: bold; color: var(--gold); margin-bottom: 5px; }
+        
+        /* شاشة الدخول */
+        #login { position: fixed; inset: 0; background: var(--primary); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+        .card { background: white; padding: 30px; border-radius: 20px; width: 85%; text-align: center; border-top: 6px solid var(--gold); }
+        input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; }
+        .btn-main { background: var(--gold); color: white; border: none; padding: 15px; border-radius: 30px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
+
+        /* قسم التحويل البنكي */
+        .bank-card { background: #fff; margin: 15px; padding: 15px; border-radius: 15px; border: 1px dashed var(--gold); text-align: center; }
+        .iban-box { background: #f0f0f0; padding: 10px; border-radius: 8px; font-family: monospace; font-size: 14px; margin: 10px 0; color: #333; }
+
+        .services { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+        .s-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-bottom: 3px solid var(--gold); }
+        
+        nav { position: fixed; bottom: 0; width: 100%; background: var(--primary); display: flex; justify-content: space-around; padding: 15px 0; border-top: 3px solid var(--gold); }
+        nav a { color: white; text-decoration: none; font-size: 12px; text-align: center; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body class="rtl">
+
+    <div class="lang-box">
+        <button id="ar-btn" class="lang-btn active-lang" onclick="setLang('ar')">العربية</button>
+        <button id="en-btn" class="lang-btn" onclick="setLang('en')">English</button>
+    </div>
+
+    <div id="login">
+        <div class="card">
+            <div class="logo-area">GARS</div>
+            <h2 id="l-title">مؤسسة غرس</h2>
+            <p id="l-sub">تنسيق حدائق وشبكات ري</p>
+            <input id="u-name" type="text" placeholder="الاسم">
+            <input id="u-phone" type="number" placeholder="رقم الجوال">
+            <button class="btn-main" onclick="startApp()" id="l-btn">دخول</button>
+        </div>
+    </div>
+
+    <div id="app" class="hidden">
+        <header>
+            <div class="logo-area">GARS</div>
+            <h2 id="h-title">غرس لتنسيق الحدائق</h2>
+        </header>
+
+        <div class="bank-card">
+            <strong id="b-title">معلومات التحويل البنكي (الراجحي)</strong>
+            <div class="iban-box" id="iban">SA56 8000 0204 6080 1612 0119</div>
+            <button onclick="copyIban()" style="color:var(--primary); background:none; border:none; font-weight:bold; cursor:pointer;" id="copy-btn">نسخ الآيبان</button>
+        </div>
+
+        <div class="services">
+            <div class="s-card">🍃<br><b id="s1">تنسيق حدائق</b></div>
+            <div class="s-card">💧<br><b id="s2">شبكات ري</b></div>
+            <div class="s-card">🌲<br><b id="s3">توريد شتلات</b></div>
+            <div class="s-card">🛠️<br><b id="s4">صيانة دورية</b></div>
+        </div>
+
+        <nav>
+            <a href="#"><b id="n1">الرئيسية</b></a>
+            <a href="#"><b id="n2">المتجر</b></a>
+            <a href="https://wa.me/966561320444"><b id="n4">تواصل واتساب</b></a>
+        </nav>
+    </div>
+
+    <script>
+        const trans = {
+            ar: { lT: "مؤسسة غرس", lB: "دخول", name: "الاسم", phone: "رقم الجوال", hT: "غرس لتنسيق الحدائق", bT: "معلومات التحويل البنكي", copy: "نسخ الآيبان", s1: "تنسيق حدائق", s2: "شبكات ري", s3: "توريد شتلات", s4: "صيانة دورية", n1: "الرئيسية", n2: "المتجر", n4: "تواصل واتساب" },
+            en: { lT: "Gars Foundation", lB: "Login", name: "Name", phone: "Phone", hT: "Gars Landscaping", bT: "Bank Transfer Info", copy: "Copy IBAN", s1: "Landscaping", s2: "Irrigation", s3: "Plant Supply", s4: "Maintenance", n1: "Home", n2: "Store", n4: "WhatsApp" }
+        };
+
+        function setLang(l) {
+            const html = document.getElementById('main-html');
+            html.dir = l === 'ar' ? 'rtl' : 'ltr';
+            document.getElementById('ar-btn').className = l === 'ar' ? "lang-btn active-lang" : "lang-btn";
+            document.getElementById('en-btn').className = l === 'en' ? "lang-btn active-lang" : "lang-btn";
+            const t = trans[l];
+            document.getElementById('l-title').innerText = t.lT; document.getElementById('l-btn').innerText = t.lB;
+            document.getElementById('u-name').placeholder = t.name; document.getElementById('u-phone').placeholder = t.phone;
+            document.getElementById('h-title').innerText = t.hT; document.getElementById('b-title').innerText = t.bT;
+            document.getElementById('copy-btn').innerText = t.copy; document.getElementById('s1').innerText = t.s1;
+            document.getElementById('s2').innerText = t.s2; document.getElementById('s3').innerText = t.s3;
+            document.getElementById('s4').innerText = t.s4; document.getElementById('n1').innerText = t.n1;
+            document.getElementById('n2').innerText = t.n2; document.getElementById('n4').innerText = t.n4;
+        }
+
+        function startApp() {
+            if(document.getElementById('u-name').value && document.getElementById('u-phone').value) {
+                document.getElementById('login').classList.add('hidden');
+                document.getElementById('app').classList.remove('hidden');
+            }
+        }
+
+        function copyIban() {
+            navigator.clipboard.writeText("SA56 8000 0204 6080 1612 0119");
+            alert("تم نسخ الآيبان بنجاح");
+        }
+    </script>
+</body>
+</html>
+
