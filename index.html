@@ -1,191 +1,147 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="main-html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مؤسسة غرس | Gars</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>مؤسسة غرس لتنسيق الحدائق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --primary: #0a2b16;
-            --gold: #c5a059;
-            --bg: #050a07;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --text: #ffffff;
-        }
+        :root { --royal-green: #1a472a; --gold: #c5a059; --bg-light: #f4f7f6; }
+        * { box-sizing: border-box; transition: all 0.3s ease; }
+        body { margin: 0; background: var(--bg-light); color: #333; font-family: 'Tajawal', sans-serif; overflow-x: hidden; }
+        
+        /* الهوية البصرية */
+        header { background: var(--royal-green); padding: 50px 20px; text-align: center; color: white; border-radius: 0 0 50px 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .logo-area { font-size: 40px; border: 3px solid var(--gold); width: 80px; height: 80px; line-height: 80px; border-radius: 50%; margin: 0 auto 15px; color: var(--gold); background: white; }
+        
+        /* شاشة الدخول الفاخرة */
+        #login-screen { position: fixed; inset: 0; background: linear-gradient(135deg, var(--royal-green), #0d2516); z-index: 5000; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: white; width: 85%; max-width: 400px; padding: 40px 30px; border-radius: 30px; text-align: center; border-bottom: 8px solid var(--gold); }
+        input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; outline: none; background: #fafafa; }
+        input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(197, 160, 89, 0.2); }
+        .btn-gold { background: var(--gold); color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: bold; font-size: 18px; cursor: pointer; }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: 'Tajawal', sans-serif;
-            margin: 0; background-color: var(--bg);
-            background-image: radial-gradient(circle at top right, #0a2b16 0%, transparent 40%);
-            color: var(--text); overflow-x: hidden; min-height: 100vh;
-        }
-
-        /* شاشة الدخول */
-        #login-screen {
-            position: fixed; inset: 0; background: var(--bg); z-index: 3000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 20px; text-align: center;
-        }
-        .login-logo {
-            width: 100px; height: 100px; border-radius: 50%;
-            border: 2px solid var(--gold); margin-bottom: 20px; overflow: hidden;
-        }
-
-        input {
-            width: 100%; max-width: 300px; padding: 15px; margin-bottom: 10px;
-            border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-            background: var(--card-bg); color: white; text-align: center; outline: none;
-        }
-
-        .btn-enter {
-            width: 100%; max-width: 300px; padding: 15px; border-radius: 12px;
-            border: none; background: var(--gold); color: white; font-weight: 700; cursor: pointer;
-        }
-
-        /* الهيدر */
-        header { padding: 30px 20px 10px; text-align: center; }
-        .user-welcome { font-size: 20px; color: var(--gold); font-weight: 700; }
+        /* شريط التنقل السفلي - 5 أيقونات */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.1); z-index: 1000; }
+        .nav-item { text-align: center; text-decoration: none; color: #999; flex: 1; font-size: 11px; font-weight: bold; }
+        .nav-item.active { color: var(--royal-green); }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
 
         /* الأقسام */
-        .page { display: none; padding: 0 20px 100px; animation: fadeIn 0.4s; }
-        .active-page { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .view { padding: 20px; padding-bottom: 100px; display: none; }
+        .active-view { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .section-title { font-size: 20px; margin: 25px 0 15px; border-right: 3px solid var(--gold); padding-right: 10px; }
+        /* بطاقات الخدمات */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: white; padding: 25px 15px; border-radius: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-right: 5px solid var(--gold); }
+        .card span { font-size: 30px; display: block; margin-bottom: 10px; }
 
-        /* كروت الخدمات الأربعة */
-        .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .service-card {
-            background: var(--card-bg); border-radius: 18px; padding: 20px;
-            text-align: center; border: 1px solid rgba(255,255,255,0.05);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .service-card i { font-size: 32px; margin-bottom: 10px; display: block; }
-        .service-card h3 { font-size: 14px; margin: 0; line-height: 1.4; }
+        /* تتبع الفني (خريطة تجريبية) */
+        .map-placeholder { background: #eee; height: 200px; border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 2px solid var(--gold); }
+        .tech-dot { width: 15px; height: 15px; background: red; border-radius: 50%; position: absolute; box-shadow: 0 0 15px red; animation: move 5s infinite linear; }
+        @keyframes move { 0% {left: 10%; top: 10%;} 50% {left: 80%; top: 70%;} 100% {left: 10%; top: 10%;} }
 
-        /* الشريط السفلي - 5 أيقونات */
-        .nav-bar {
-            position: fixed; bottom: 15px; left: 15px; right: 15px;
-            background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px);
-            border-radius: 20px; display: flex; justify-content: space-around;
-            padding: 10px 5px; border: 1px solid rgba(255,255,255,0.1); z-index: 2000;
-        }
-        .nav-item { color: #777; display: flex; flex-direction: column; align-items: center; font-size: 10px; cursor: pointer; flex: 1; }
-        .nav-item.active { color: var(--gold); }
-        .nav-item i { font-size: 20px; margin-bottom: 4px; }
-
-        /* لوحة التحكم */
-        .admin-row { background: var(--card-bg); margin-bottom: 8px; padding: 12px; border-radius: 10px; display: flex; justify-content: space-between; font-size: 13px; }
-
+        .iban-box { background: white; padding: 20px; border-radius: 20px; border: 2px dashed var(--gold); text-align: center; margin-top: 20px; }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
+    <button onclick="toggleLang()" style="position:fixed; top:20px; left:20px; z-index:6000; background:var(--gold); color:white; border:none; border-radius:10px; padding:5px 10px;" id="langBtn">English</button>
+
     <div id="login-screen">
-        <div class="login-logo"><img src="https://i.ibb.co/XfXkXyG/logo.jpg" style="width:100%; height:100%;" alt=""></div>
-        <h2 style="color: var(--gold); margin-bottom: 30px;">مؤسسة غرس</h2>
-        <input type="text" id="u-name" placeholder="الاسم الكامل">
-        <input type="tel" id="u-phone" placeholder="رقم الجوال">
-        <button class="btn-enter" onclick="launchApp()">دخول</button>
-    </div>
-
-    <header><div class="user-welcome" id="display-name">مرحباً بك</div></header>
-
-    <div id="p-services" class="page active-page">
-        <div class="section-title">خدماتنا</div>
-        <div class="services-grid">
-            <div class="service-card"><i>🌿</i><h3>تنسيق حدائق</h3></div>
-            <div class="service-card"><i>💧</i><h3>تركيب شبكات الري</h3></div>
-            <div class="service-card"><i>🛠️</i><h3>صيانة دورية</h3></div>
-            <div class="service-card"><i>🌻</i><h3>زراعة النباتات</h3></div>
+        <div class="login-card">
+            <div class="logo-area">🌿</div>
+            <h2 style="color:var(--royal-green); margin:0;" id="l-name">مؤسسة غرس</h2>
+            <p style="color:var(--gold); font-size:13px; margin-bottom:25px;" id="l-sub">لتنسيق الحدائق وتركيب شبكات الري</p>
+            <input type="text" id="custName" placeholder="الاسم الكامل">
+            <input type="tel" id="custPhone" placeholder="رقم الجوال">
+            <button class="btn-gold" onclick="login()" id="l-btn">دخول فوري</button>
         </div>
     </div>
 
-    <div id="p-shop" class="page"><div class="section-title">المتجر</div><p style="text-align:center; opacity:0.5;">قريباً..</p></div>
+    <div id="app" class="hidden">
+        <header>
+            <div class="logo-area">🌴</div>
+            <h2 id="h-title">مؤسسة غرس لتنسيق الحدائق</h2>
+            <p id="h-sub">خبيرك في التصميم والري</p>
+        </header>
 
-    <div id="p-profile" class="page"><div class="section-title">بياناتي</div><p id="profile-info" style="text-align:center;"></p></div>
-
-    <div id="p-pay" class="page">
-        <div class="section-title">الدفع البنكي</div>
-        <div style="background:linear-gradient(135deg, #111, #000); padding:25px; border-radius:20px; border:1px solid var(--gold); text-align:center;">
-            <p>مصرف الراجحي</p>
-            <h3 style="letter-spacing:1px; margin:15px 0;">SA56 8000 0204 6080 1612 0119</h3>
-            <button class="btn-enter" onclick="copyIban()">نسخ الآيبان</button>
+        <div id="view-services" class="view active-view">
+            <h3 id="t1">خدماتنا الاحترافية</h3>
+            <div class="grid">
+                <div class="card"><span>🍃</span><b id="s1">تنسيق حدائق</b></div>
+                <div class="card"><span>💧</span><b id="s2">شبكات ري</b></div>
+                <div class="card"><span>🌲</span><b id="s3">توريد نباتات</b></div>
+                <div class="card"><span>🛠️</span><b id="s4">صيانة شاملة</b></div>
+            </div>
+            
+            <h3 id="t2" style="margin-top:30px;">تتبع الفني (مباشر)</h3>
+            <div class="map-placeholder">
+                <span id="m-text">الفني في الطريق إليك...</span>
+                <div class="tech-dot"></div>
+            </div>
         </div>
+
+        <div id="view-payments" class="view">
+            <h3 id="t3">بوابة الدفع الإلكتروني</h3>
+            <div class="iban-box">
+                <p><b>مصرف الراجحي</b></p>
+                <code style="font-size:14px;" id="ibanNum">SA56 8000 0204 6080 1612 0119</code>
+                <br><br>
+                <button onclick="copyIban()" class="btn-gold" style="padding:10px;" id="p-copy">نسخ الآيبان</button>
+            </div>
+        </div>
+
+        <nav class="nav-bar">
+            <a href="javascript:void(0)" class="nav-item active" onclick="showView('services', this)"><i>🌿</i><span id="n1">خدماتنا</span></a>
+            <a href="javascript:void(0)" class="nav-item" onclick="showView('store', this)"><i>🛒</i><span id="n2">المتجر</span></a>
+            <a href="javascript:void(0)" class="nav-item" onclick="showView('info', this)"><i>👤</i><span id="n3">بياناتي</span></a>
+            <a href="javascript:void(0)" class="nav-item" onclick="showView('payments', this)"><i>💳</i><span id="n4">الدفع</span></a>
+            <a href="https://wa.me/966561320444" class="nav-item"><i>💬</i><span id="n5">تواصل</span></a>
+        </nav>
     </div>
-
-    <div id="p-admin" class="page">
-        <div class="section-title">لوحة المدير</div>
-        <div id="admin-results"></div>
-    </div>
-
-    <nav class="nav-bar">
-        <div class="nav-item active" onclick="navTo('p-services', this)"><i>🌿</i>الخدمات</div>
-        <div class="nav-item" onclick="navTo('p-shop', this)"><i>🛒</i>المتجر</div>
-        <div class="nav-item" onclick="navTo('p-profile', this)"><i>👤</i>بياناتي</div>
-        <div class="nav-item" onclick="navTo('p-pay', this)"><i>💳</i>الدفع</div>
-        <div id="nav-admin" class="nav-item hidden" onclick="checkAdminAccess()"><i>⚙️</i>التحكم</div>
-    </nav>
-
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
-        const firebaseConfig = { databaseURL: "https://gars-app-default-rtdb.firebaseio.com/" };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        const MASTER_PASS = "Mostafa346355";
-        const MASTER_PHONE = "0561320444";
-        let userPhone = "";
-        let userName = "";
-
-        function launchApp() {
-            userName = document.getElementById('u-name').value;
-            userPhone = document.getElementById('u-phone').value;
-            if(userName && userPhone) {
-                database.ref('visitors').push({ name: userName, phone: userPhone, time: new Date().toLocaleString('ar-SA') });
-                document.getElementById('display-name').innerText = "يا هلا، " + userName;
-                document.getElementById('profile-info').innerText = "الاسم: " + userName + "\n الجوال: " + userPhone;
+        // دالة الدخول وحفظ البيانات في Firebase (مستقبلاً)
+        function login() {
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            if(name && phone) {
                 document.getElementById('login-screen').classList.add('hidden');
-                if(userPhone === MASTER_PHONE) document.getElementById('nav-admin').classList.remove('hidden');
-            } else { alert("تأكد من إدخال البيانات"); }
-        }
-
-        function navTo(pageId, el) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active-page');
-            el.classList.add('active');
-        }
-
-        function checkAdminAccess() {
-            if(userPhone !== MASTER_PHONE) return;
-            const p = prompt("الرمز السري:");
-            if(p === MASTER_PASS) {
-                navTo('p-admin', document.getElementById('nav-admin'));
-                fetchData();
+                document.getElementById('app').classList.remove('hidden');
+            } else {
+                alert("لطفاً أدخل الاسم ورقم الجوال");
             }
         }
 
-        function fetchData() {
-            database.ref('visitors').on('value', (snap) => {
-                const res = document.getElementById('admin-results');
-                res.innerHTML = "";
-                snap.forEach(c => {
-                    const d = c.val();
-                    res.innerHTML += `<div class="admin-row"><span>${d.name}</span><span style="color:var(--gold)">${d.phone}</span></div>`;
-                });
-            });
+        // دالة التنقل بين الصفحات
+        function showView(viewId, element) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active-view'));
+            const target = document.getElementById('view-' + viewId);
+            if(target) target.classList.add('active-view');
+            
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active-view'));
+            element.classList.add('active-view');
         }
 
+        // دالة نسخ الآيبان
         function copyIban() {
             navigator.clipboard.writeText("SA56 8000 0204 6080 1612 0119");
-            alert("تم النسخ");
+            alert("تم نسخ الآيبان");
+        }
+
+        // دعم اللغات
+        let lang = 'ar';
+        function toggleLang() {
+            lang = lang === 'ar' ? 'en' : 'ar';
+            document.getElementById('main-html').dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.getElementById('langBtn').innerText = lang === 'ar' ? 'English' : 'العربية';
+            // تغيير النصوص هنا (تبسيطاً للمثال)
         }
     </script>
 </body>
 </html>
+
