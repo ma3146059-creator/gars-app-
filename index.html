@@ -8,169 +8,6 @@
     <style>
         :root {
             --dark-green: #052c15; /* الأخضر الملكي من الصورة */
-            --gold: #c5a059; /* الذهبي من الصورة */
-            --card-bg: #1a1a1a; /* لون بطاقة الدخول */
-            --btn-brown: #3d1c0c; /* لون زر المتابعة */
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Tajawal', sans-serif;
-            background-color: var(--dark-green);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        /* تنسيق الشعار العلوي */
-        .header {
-            padding-top: 50px;
-            text-align: center;
-            width: 100%;
-        }
-
-        .logo-circle {
-            width: 130px;
-            height: 130px;
-            background-color: white;
-            border: 3px solid var(--gold);
-            border-radius: 50%;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
-        }
-
-        /* صورة الشعار (النخلة والإكليل) */
-        .logo-circle img {
-            width: 85%;
-            height: 85%;
-            object-fit: contain;
-        }
-
-        .title {
-            color: var(--gold);
-            font-size: 24px;
-            margin: 15px 0 5px;
-            font-weight: bold;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 30px;
-        }
-
-        /* بطاقة تسجيل الدخول */
-        .login-card {
-            background-color: var(--card-bg);
-            width: 85%;
-            max-width: 350px;
-            border-radius: 30px;
-            padding: 30px 20px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .login-card h2 {
-            font-size: 20px;
-            margin-bottom: 25px;
-        }
-
-        .input-group {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(197, 160, 89, 0.2);
-            border-radius: 15px;
-            margin-bottom: 15px;
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .input-group input {
-            background: transparent;
-            border: none;
-            color: white;
-            width: 100%;
-            font-family: 'Tajawal';
-            outline: none;
-            text-align: right;
-        }
-
-        .input-group i {
-            color: var(--gold);
-            font-size: 18px;
-        }
-
-        /* زر المتابعة */
-        .btn-submit {
-            background-color: var(--btn-brown);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 15px;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .btn-submit:active {
-            transform: scale(0.98);
-        }
-    </style>
-</head>
-<body>
-
-    <div class="header">
-        <div class="logo-circle">
-            <img src="logo.png" alt="شعار مؤسسة غرس">
-        </div>
-        <div class="title">غرس لتنسيق الحدائق</div>
-        <div class="subtitle">تنسيق الحدائق وتركيب شبكات الري</div>
-    </div>
-
-    <div class="login-card">
-        <h2>تسجيل الدخول</h2>
-        
-        <div class="input-group">
-            <span>👤</span>
-            <input type="text" placeholder="أدخل اسمك الكامل">
-        </div>
-
-        <div class="input-group">
-            <span>📞</span>
-            <input type="tel" placeholder="أدخل رقم جوالك">
-        </div>
-
-        <button class="btn-submit">
-            متابعة 
-            <span style="font-size: 20px;">←</span>
-        </button>
-    </div>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مؤسسة غرس لتنسيق الحدائق</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --dark-green: #052c15; /* الأخضر الملكي من الصورة */
             --gold: #c5a059; /* الذهبي الملكي */
             --card-bg: #1a1a1a; /* لون بطاقة الدخول */
             --btn-brown: #3d1c0c; /* لون زر المتابعة */
@@ -204,3 +41,113 @@
         
         .title { color: var(--gold); font-size: 26px; font-weight: bold; margin: 10px 0; }
         .subtitle { font-size:
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مؤسسة غرس لتنسيق الحدائق</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        :root { --royal-green: #052c15; --gold: #c5a059; --dark-card: #121212; }
+        body { margin: 0; font-family: 'Tajawal', sans-serif; background-color: var(--royal-green); color: white; }
+        
+        /* تنسيق شاشة الدخول */
+        .page { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; }
+        .hidden { display: none !important; }
+        
+        .logo-ring { width: 130px; height: 130px; background: white; border: 3px solid var(--gold); border-radius: 50%; margin: 40px 0 20px; display: flex; align-items: center; justify-content: center; }
+        .logo-ring img { width: 85%; object-fit: contain; }
+
+        .login-card { background: var(--dark-card); width: 90%; max-width: 380px; padding: 30px 20px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .input-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(197, 160, 89, 0.3); border-radius: 15px; margin-bottom: 15px; padding: 15px; display: flex; gap: 10px; }
+        input { background: transparent; border: none; color: white; width: 100%; outline: none; text-align: right; font-family: 'Tajawal'; }
+        
+        .btn-primary { background: #3d1c0c; color: white; padding: 18px; border-radius: 15px; width: 100%; border: none; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+
+        /* تنسيق لوحة الخدمات (الرئيسية) */
+        .services-grid { width: 100%; max-width: 500px; margin-top: 20px; }
+        .service-item { 
+            background: linear-gradient(145deg, #1a1a1a, #0a0a0a); 
+            border: 1px solid rgba(197, 160, 89, 0.2); 
+            padding: 25px; border-radius: 20px; margin-bottom: 15px;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: 0.3s;
+        }
+        .service-item:active { transform: scale(0.97); }
+        .service-info b { font-size: 18px; color: var(--gold); }
+        .service-icon { font-size: 30px; }
+
+        /* القائمة السفلية */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; justify-content: space-around; padding: 15px 0; border-top: 1px solid var(--gold); }
+        .nav-item { color: #888; text-decoration: none; font-size: 12px; text-align: center; }
+        .nav-item.active { color: var(--gold); }
+    </style>
+</head>
+<body>
+
+    <div id="loginPage" class="page">
+        <div class="logo-ring"><img src="logo.png" alt="الشعار"></div>
+        <h2 style="color:var(--gold);">مؤسسة غرس</h2>
+        <div class="login-card">
+            <div class="input-box">👤 <input type="text" id="name" placeholder="الاسم الكامل"></div>
+            <div class="input-box">📞 <input type="tel" id="phone" placeholder="رقم الجوال"></div>
+            <button class="btn-primary" onclick="handleLogin()">متابعة ←</button>
+        </div>
+    </div>
+
+    <div id="mainPage" class="page hidden">
+        <h3 style="color:var(--gold); border-bottom: 2px solid var(--gold); padding-bottom: 10px;">خدماتنا الفنية</h3>
+        
+        <div class="services-grid">
+            <div class="service-item">
+                <div class="service-info"><b>تنسيق وتصميم الحدائق</b></div>
+                <div class="service-icon">🍃</div>
+            </div>
+            <div class="service-item">
+                <div class="service-info"><b>تركيب أنظمة الري الحديثة</b></div>
+                <div class="service-icon">💧</div>
+            </div>
+            <div class="service-item">
+                <div class="service-info"><b>بناء المظلات والشلالات</b></div>
+                <div class="service-icon">🏗️</div>
+            </div>
+        </div>
+
+        <nav class="nav-bar">
+            <a href="#" class="nav-item active">🏠<br>الرئيسية</a>
+            <a href="#" class="nav-item">💳<br>الدفع</a>
+            <a href="#" class="nav-item">⚙️<br>التحكم</a>
+        </nav>
+    </div>
+
+    <script>
+        // كود الربط الخاص بك
+        const firebaseConfig = {
+            databaseURL: "https://gars-app-default-rtdb.firebaseio.com",
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function handleLogin() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+
+            if(name && phone) {
+                database.ref('visitors').push({
+                    name: name,
+                    phone: phone,
+                    date: new Date().toLocaleString('ar-SA')
+                }).then(() => {
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('mainPage').classList.remove('hidden');
+                });
+            } else {
+                alert("لطفاً أدخل الاسم والجوال");
+            }
+        }
+    </script>
+</body>
+</html>
