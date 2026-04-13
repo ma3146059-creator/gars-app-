@@ -1,121 +1,74 @@
-dependencies:
-  flutter:
-    sdk: flutter
-  google_maps_flutter: ^2.5.0 # لتتبع الموظف
-  url_launcher: ^6.2.1        # للواتساب والاتصال
-  shared_preferences: ^2.2.2 # لحفظ بيانات العميل
-  pdf: ^3.10.7                # لإصدار الفواتير
-  cloud_firestore: ^4.14.0    # لإدارة المتجر والطلبات (Admin Panel)
-import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-void main() => runApp(GarsApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // تهيئة فايربيس باستخدام بياناتك الخاصة
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: "AIzaSyCRBhes7JmJIi8YiJU4X6XZNO5iAjjKwa8",
+      appId: "1:1065564437237:web:2ca911da26144ce5d1a3bc", // هذا هو App ID الخاص بك
+      messagingSenderId: "1065564437237",
+      projectId: "gars-app",
+      databaseURL: "https://gars-app-default-rtdb.firebaseio.com",
+      storageBucket: "gars-app.firebasestorage.app",
+    ),
+  );
+  
+  runApp(GarsApp());
+}
+class AdminPanel extends StatelessWidget {
+  final _db = FirebaseDatabase.instance.ref();
 
-class GarsApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Color(0xFF1B5E20), // أخضر ملكي
-        accentColor: Color(0xFFD4AF37),  // ذهبي
-        fontFamily: 'Tajawal',
-      ),
-      home: MainNavigation(),
-    );
+  // وظيفة لتحديث سعر منتج في المتجر
+  void updateProductPrice(String productId, double newPrice) {
+    _db.child('products/$productId').update({
+      'price': newPrice,
+    });
   }
-}
 
-class MainNavigation extends StatefulWidget {
-  @override
-  _MainNavigationState createState() => _MainNavigationState();
-}
-
-class _MainNavigationState extends State<MainNavigation> {
-  int _selectedIndex = 0;
-
-  // القائمة التي تحتوي على الصفحات الخمس
-  final List<Widget> _pages = [
-    ServicesPage(),
-    StorePage(),
-    ClientInfoPage(),
-    PaymentPage(),
-    ContactPage(),
-  ];
+  // وظيفة لرفع مشروع جديد لقسم "أعمالنا"
+  void uploadProject(String title, String imageUrl) {
+    _db.child('projects').push().set({
+      'title': title,
+      'imageUrl': imageUrl,
+      'date': DateTime.now().toIso8601String(),
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFFD4AF37), // ذهبي
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) => setState(() => _selectedIndex = index),
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.eco), label: 'خدماتنا'),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'المتجر'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'بياناتي'),
-          BottomNavigationBarItem(icon: Icon(Icons.payments), label: 'الدفع'),
-          BottomNavigationBarItem(icon: Icon(Icons.contact_support), label: 'تواصل'),
-        ],
-      ),
-    );
-  }
-}
-class PaymentPage extends StatelessWidget {
-  final String iban = "SA56 8000 0204 6080 1612 0119";
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("الدفع الإلكتروني"), backgroundColor: Color(0xFF1B5E20)),
+      appBar: AppBar(title: Text("لوحة التحكم - غرس"), backgroundColor: Color(0xFF1B5E20)),
       body: Center(
-        child: Card(
-          margin: EdgeInsets.all(20),
-          elevation: 5,
-          child: Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.network('رابط_صورة_باركود_الراجحي'), // استبدله برابط الصورة
-                SizedBox(height: 20),
-                Text("مصرف الراجحي", style: TextStyle(fontWeight: FontWeight.bold)),
-                SelectableText(iban, style: TextStyle(fontSize: 16)),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // كود النسخ للحافظة
-                    // Clipboard.setData(ClipboardData(text: iban));
-                  },
-                  icon: Icon(Icons.copy),
-                  label: Text("نسخ الآيبان"),
-                  style: ElevatedButton.styleFrom(primary: Color(0xFFD4AF37)),
-                )
-              ],
-            ),
-          ),
-        ),
+        child: Text("هنا يمكنك التحكم بالمتجر والمشاريع"),
+        // يمكنك هنا إضافة TextFields لإدخال الأسعار والصور
       ),
     );
   }
 }
-class TrackingPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(
-        target: LatLng(24.7136, 46.6753), // إحداثيات الرياض كمثال
-        zoom: 14.47,
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+
+class InvoiceService {
+  static Future<void> createInvoice(String clientName, double total) async {
+    final pdf = pw.Document();
+    
+    pdf.addPage(pw.Page(
+      build: (pw.Context context) => pw.Center(
+        child: pw.Column(children: [
+          pw.Text("مؤسسة غرس لتنسيق الحدائق", style: pw.TextStyle(fontSize: 24)),
+          pw.Divider(),
+          pw.Text("اسم العميل: $clientName"),
+          pw.Text("المجموع الإجمالي: $total ريال"),
+          pw.Text("التاريخ: ${DateTime.now().toString()}"),
+        ]),
       ),
-      markers: {
-        Marker(
-          markerId: MarkerId('technician'),
-          position: LatLng(24.7136, 46.6753),
-          infoWindow: InfoWindow(title: 'الموظف في الطريق إليك'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-        ),
-      },
-    );
+    ));
+
+    // معاينة الفاتورة ومشاركتها فوراً
+    await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf.save());
   }
 }
